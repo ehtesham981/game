@@ -1,0 +1,7 @@
+{
+  "name": "Ads Predia",
+  "description": "A professional micro-freelancing and website monetization platform. Earn coins through tasks, videos, and games, or monetize your web traffic with premium ad zones.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
