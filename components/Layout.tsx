@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-// Added missing icons: Rocket, Globe, Star, CheckCircle2
 import { Menu, X, LogOut, ChevronRight, User as UserIcon, Moon, Sun, Rocket, Globe, Star, CheckCircle2 } from 'lucide-react';
 import { NAV_ITEMS, ADMIN_NAV_ITEMS } from '../constants';
 import { useApp } from '../store/AppContext';
@@ -42,9 +41,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {/* Desktop Navigation for Public/Auth */}
             {!currentUser && (
                <div className="hidden lg:flex items-center gap-10">
-                  <NavLink to="/" className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>Network</NavLink>
-                  <NavLink to="/tasks" className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>Earnings</NavLink>
-                  <NavLink to="/websites" className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>Publishers</NavLink>
+                  <NavLink to="/how-it-works" className={({isActive}) => `text-sm font-black uppercase tracking-widest transition-colors ${isActive ? 'text-indigo-500' : theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>How it Works</NavLink>
+                  <NavLink to="/ad-formats" className={({isActive}) => `text-sm font-black uppercase tracking-widest transition-colors ${isActive ? 'text-indigo-500' : theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>Ad Formats</NavLink>
+                  <NavLink to="/signup" className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>Publishers</NavLink>
                </div>
             )}
 
@@ -129,9 +128,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="space-y-2">
               <p className={`text-xs font-black uppercase tracking-[0.3em] px-4 mb-4 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>Navigation Hub</p>
               {(currentUser ? navLinks : [
-                { name: 'Home', path: '/', icon: <Rocket /> },
-                { name: 'Tasks', path: '/tasks', icon: <ChevronRight /> },
-                { name: 'Publishers', path: '/websites', icon: <Globe /> }
+                { name: 'Home', path: '/home', icon: <Rocket /> },
+                { name: 'How it Works', path: '/how-it-works', icon: <CheckCircle2 /> },
+                { name: 'Ad Formats', path: '/ad-formats', icon: <Globe /> },
+                { name: 'Tasks', path: '/tasks', icon: <ChevronRight /> }
               ]).map((item) => (
                 <NavLink 
                   key={item.path} 
@@ -213,10 +213,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div>
             <h4 className={`font-black mb-8 uppercase tracking-[0.2em] text-xs ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>Network Hub</h4>
             <ul className={`space-y-4 text-sm font-bold ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-              <li><NavLink to="/" className="hover:text-indigo-600 transition-colors">Digital Pulse</NavLink></li>
-              <li><NavLink to="/tasks" className="hover:text-indigo-600 transition-colors">Earning Zone</NavLink></li>
-              <li><NavLink to="/websites" className="hover:text-indigo-600 transition-colors">Monetization V2</NavLink></li>
-              <li><NavLink to="/wallet" className="hover:text-indigo-600 transition-colors">Secure Wallet</NavLink></li>
+              <li><NavLink to="/how-it-works" className="hover:text-indigo-600 transition-colors">How it Works</NavLink></li>
+              <li><NavLink to="/ad-formats" className="hover:text-indigo-600 transition-colors">Ad Showcase</NavLink></li>
+              <li><NavLink to="/signup" className="hover:text-indigo-600 transition-colors">Join Earner</NavLink></li>
+              <li><NavLink to="/login" className="hover:text-indigo-600 transition-colors">Partner Access</NavLink></li>
             </ul>
           </div>
 

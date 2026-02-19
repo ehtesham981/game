@@ -4,23 +4,24 @@ import { useApp } from '../store/AppContext';
 import { 
   Globe, 
   Plus, 
-  Search, 
   ExternalLink, 
-  TrendingUp, 
   BarChart3, 
   Clock, 
   CheckCircle2, 
   XCircle,
   Copy,
-  Layout
+  Layout as LayoutIcon,
+  ShieldCheck,
+  TrendingUp,
+  X
 } from 'lucide-react';
 
 const Websites: React.FC = () => {
-  const { websites, addWebsite, currentUser } = useApp();
+  const { websites, addWebsite, currentUser, theme } = useApp();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newSite, setNewSite] = useState({ url: '', category: 'Blog' });
 
-  const categories = ['Blog', 'Entertainment', 'E-commerce', 'Forum', 'News', 'Tools', 'Other'];
+  const categories = ['Blog', 'Entertainment', 'E-commerce', 'Forum', 'News', 'Tools', 'SaaS', 'Other'];
 
   const handleAddWebsite = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,17 +44,16 @@ const Websites: React.FC = () => {
 
     setNewSite({ url: '', category: 'Blog' });
     setShowAddForm(false);
-    alert("Website submitted for review! Our team will verify it within 24 hours.");
   };
 
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'APPROVED':
-        return <span className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20"><CheckCircle2 size={12} /> Approved</span>;
+        return <span className="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-500/10 text-emerald-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20"><CheckCircle2 size={12} /> Live Network</span>;
       case 'PENDING':
-        return <span className="flex items-center gap-1 px-3 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-yellow-500/20"><Clock size={12} /> Pending Review</span>;
+        return <span className="flex items-center gap-1.5 px-4 py-1.5 bg-yellow-500/10 text-yellow-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-yellow-500/20"><Clock size={12} /> Auditing</span>;
       case 'REJECTED':
-        return <span className="flex items-center gap-1 px-3 py-1 bg-red-500/10 text-red-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20"><XCircle size={12} /> Rejected</span>;
+        return <span className="flex items-center gap-1.5 px-4 py-1.5 bg-red-500/10 text-red-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20"><XCircle size={12} /> Compliance Fail</span>;
       default:
         return null;
     }
@@ -62,47 +62,55 @@ const Websites: React.FC = () => {
   const userWebsites = websites.filter(w => w.ownerId === currentUser?.id);
 
   return (
-    <div className="space-y-8 pb-12">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-white">Website Monetization</h1>
-          <p className="text-slate-400">Add your domains and turn your traffic into revenue.</p>
+    <div className="space-y-12 pb-24 animate-in fade-in duration-500">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <h1 className={`text-5xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>Monetization Control</h1>
+          <p className={`text-lg font-bold ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>Integrate premium ad technology into your domains.</p>
         </div>
         <button 
           onClick={() => setShowAddForm(true)}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold transition-all shadow-xl shadow-indigo-600/20"
+          className="flex items-center justify-center gap-3 px-10 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[24px] font-black text-sm transition-all shadow-2xl shadow-indigo-600/30 active:scale-95"
         >
-          <Plus size={20} /> Add New Website
+          <Plus size={20} /> New Web Domain
         </button>
       </header>
 
       {/* Add Website Modal Overlay */}
       {showAddForm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowAddForm(false)}></div>
-          <div className="relative bg-slate-900 border border-slate-800 rounded-[40px] p-8 w-full max-w-lg shadow-2xl animate-in fade-in zoom-in duration-200">
-             <h2 className="text-2xl font-black mb-6">Submit Website</h2>
-             <form onSubmit={handleAddWebsite} className="space-y-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl" onClick={() => setShowAddForm(false)}></div>
+          <div className={`relative rounded-[50px] border p-12 w-full max-w-xl shadow-2xl animate-in zoom-in duration-300 ${theme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
+             <div className="flex justify-between items-start mb-10">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-400 ml-1">Domain URL</label>
+                   <h2 className={`text-3xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>Register Domain</h2>
+                   <p className="text-sm text-slate-500 font-medium italic">All sites are reviewed within 24 hours.</p>
+                </div>
+                <button onClick={() => setShowAddForm(false)} className="p-3 hover:bg-slate-800 rounded-full text-slate-500 transition-colors">
+                   <X size={24} />
+                </button>
+             </div>
+             
+             <form onSubmit={handleAddWebsite} className="space-y-8">
+                <div className="space-y-4">
+                  <label className={`text-xs font-black uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>Domain Endpoint</label>
                   <div className="relative">
-                    <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                    <Globe className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" size={24} />
                     <input 
                       required 
                       type="text" 
-                      placeholder="example.com"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 outline-none focus:ring-2 ring-indigo-600 transition-all font-medium text-white"
+                      placeholder="e.g., mysite.com"
+                      className={`w-full py-6 pl-14 pr-6 rounded-[24px] border outline-none transition-all font-black text-lg ${theme === 'dark' ? 'bg-slate-950 border-slate-800 text-white focus:ring-2 ring-indigo-600/30' : 'bg-slate-50 border-slate-200 text-slate-950 focus:bg-white shadow-inner'}`}
                       value={newSite.url}
                       onChange={(e) => setNewSite({...newSite, url: e.target.value})}
                     />
                   </div>
-                  <p className="text-[10px] text-slate-500 ml-1">Example: myawesomeblog.com (No http/https needed)</p>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-400 ml-1">Content Category</label>
+                <div className="space-y-4">
+                  <label className={`text-xs font-black uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>Content Vertical</label>
                   <select 
-                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-4 px-4 outline-none focus:ring-2 ring-indigo-600 transition-all font-medium text-white appearance-none"
+                    className={`w-full py-6 px-6 rounded-[24px] border outline-none transition-all font-black text-lg appearance-none ${theme === 'dark' ? 'bg-slate-950 border-slate-800 text-white focus:ring-2 ring-indigo-600/30' : 'bg-slate-50 border-slate-200 text-slate-950 focus:bg-white shadow-inner'}`}
                     value={newSite.category}
                     onChange={(e) => setNewSite({...newSite, category: e.target.value})}
                   >
@@ -110,19 +118,19 @@ const Websites: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex gap-4 pt-6">
                   <button 
                     type="button"
                     onClick={() => setShowAddForm(false)}
-                    className="flex-1 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl font-bold transition-all"
+                    className={`flex-1 py-5 rounded-[24px] font-black text-sm transition-all ${theme === 'dark' ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
                   >
-                    Cancel
+                    CANCEL
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-600/20"
+                    className="flex-1 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[24px] font-black text-sm transition-all shadow-2xl shadow-indigo-600/40"
                   >
-                    Submit for Review
+                    INITIATE AUDIT
                   </button>
                 </div>
              </form>
@@ -131,72 +139,75 @@ const Websites: React.FC = () => {
       )}
 
       {userWebsites.length === 0 ? (
-        <div className="p-16 text-center bg-slate-900/50 border border-dashed border-slate-800 rounded-[40px] space-y-4">
-           <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mx-auto text-slate-700">
-              <Globe size={40} />
+        <div className={`p-24 text-center rounded-[60px] border border-dashed space-y-8 ${theme === 'dark' ? 'bg-slate-900/50 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+           <div className="w-24 h-24 bg-slate-900 rounded-[32px] flex items-center justify-center mx-auto text-slate-700 shadow-inner">
+              <Globe size={48} />
            </div>
-           <h3 className="text-2xl font-bold text-slate-300">No websites added yet</h3>
-           <p className="text-slate-500 max-w-md mx-auto">Submit your first website to start displaying premium ads and earning revenue based on your traffic quality.</p>
+           <div className="space-y-3">
+              <h3 className={`text-3xl font-black ${theme === 'dark' ? 'text-slate-300' : 'text-slate-950'}`}>Deploy Your First Zone</h3>
+              <p className="text-slate-500 max-w-md mx-auto font-medium">Submit your domain to unlock premium native ad CPMs and real-time yield optimization.</p>
+           </div>
            <button 
              onClick={() => setShowAddForm(true)}
-             className="px-8 py-3 bg-indigo-600/10 text-indigo-400 border border-indigo-600/20 rounded-2xl font-bold hover:bg-indigo-600 hover:text-white transition-all"
+             className="px-12 py-5 bg-indigo-600/10 text-indigo-600 border border-indigo-600/20 rounded-[24px] font-black text-sm hover:bg-indigo-600 hover:text-white transition-all active:scale-95"
            >
-             Get Started
+             ADD DOMAIN NOW
            </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
            {userWebsites.map((site) => (
-             <div key={site.id} className="p-8 rounded-[32px] bg-slate-900 border border-slate-800 flex flex-col gap-6 group hover:border-indigo-500/30 transition-all">
+             <div key={site.id} className={`p-10 rounded-[50px] border flex flex-col gap-8 group transition-all duration-500 hover:border-indigo-500/40 ${theme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-2xl shadow-slate-200/40'}`}>
                 <div className="flex justify-between items-start">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                       <h3 className="text-2xl font-black text-white">{site.url}</h3>
-                       <a href={`http://${site.url}`} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-indigo-400 transition-colors">
-                          <ExternalLink size={16} />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                       <h3 className={`text-3xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>{site.url}</h3>
+                       <a href={`http://${site.url}`} target="_blank" rel="noopener noreferrer" className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-slate-500 hover:text-indigo-400 transition-colors">
+                          <ExternalLink size={18} />
                        </a>
                     </div>
-                    <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">{site.category}</p>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">{site.category}</p>
                   </div>
                   {getStatusBadge(site.status)}
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/50 space-y-1">
-                     <p className="text-[10px] font-black text-slate-500 uppercase">Impressions</p>
-                     <p className="text-xl font-bold text-white">{site.stats.impressions.toLocaleString()}</p>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/50 space-y-1">
-                     <p className="text-[10px] font-black text-slate-500 uppercase">Clicks</p>
-                     <p className="text-xl font-bold text-white">{site.stats.clicks.toLocaleString()}</p>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/50 space-y-1">
-                     <p className="text-[10px] font-black text-emerald-500 uppercase tracking-wider">Earnings</p>
-                     <p className="text-xl font-bold text-emerald-400">${site.stats.earnings.toFixed(2)}</p>
-                  </div>
+                  {[
+                    { l: 'Traffic Units', v: site.stats.impressions.toLocaleString(), i: <BarChart3 size={12} /> },
+                    { l: 'Conversion', v: site.stats.clicks.toLocaleString(), i: <TrendingUp size={12} /> },
+                    { l: 'Network Yield', v: `$${site.stats.earnings.toFixed(2)}`, i: <ShieldCheck size={12} />, c: 'text-emerald-500' }
+                  ].map((s, i) => (
+                    <div key={i} className={`p-6 rounded-[28px] border space-y-2 ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                       <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">{s.i} {s.l}</p>
+                       <p className={`text-2xl font-black ${s.c || (theme === 'dark' ? 'text-white' : 'text-slate-950')}`}>{s.v}</p>
+                    </div>
+                  ))}
                 </div>
 
                 {site.status === 'APPROVED' ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-bold text-white">Integration Script</h4>
+                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-indigo-500 flex items-center gap-2">
+                           <LayoutIcon size={16} /> Native SDK Implementation
+                        </h4>
                         <button 
                           onClick={() => {
                             navigator.clipboard.writeText(`<script src="https://adspredia.site/v1/sdk.js" data-zone="zp-${site.id}" async></script>`);
                             alert("Ad script copied to clipboard!");
                           }}
-                          className="flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+                          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${theme === 'dark' ? 'bg-slate-800 text-slate-300 hover:text-white' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white'}`}
                         >
-                          <Copy size={14} /> Copy Script
+                          <Copy size={12} /> Copy Protocol
                         </button>
                      </div>
-                     <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-indigo-300 leading-relaxed break-all">
+                     <div className={`p-6 rounded-[28px] border font-mono text-xs leading-relaxed break-all ${theme === 'dark' ? 'bg-slate-950 border-slate-800 text-indigo-300' : 'bg-slate-950 text-indigo-400'}`}>
                        &lt;script src="https://adspredia.site/v1/sdk.js" data-zone="zp-{site.id}" async&gt;&lt;/script&gt;
                      </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/50 text-center">
-                    <p className="text-xs text-slate-500 italic">Ads integration will be available once the domain is approved.</p>
+                  <div className={`p-10 rounded-[32px] border border-dashed text-center space-y-3 ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                    <Clock className="mx-auto text-slate-700 opacity-20" size={32} />
+                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Awaiting Verification Result</p>
                   </div>
                 )}
              </div>

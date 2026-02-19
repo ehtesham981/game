@@ -4,6 +4,8 @@ import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider, useApp } from './store/AppContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import HowItWorks from './pages/HowItWorks';
+import AdFormats from './pages/AdFormats';
 import { Login, Signup } from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
@@ -27,6 +29,8 @@ const App: React.FC = () => {
         <Layout>
           <Routes>
             <Route path="/home" element={<Home />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/ad-formats" element={<AdFormats />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             
@@ -43,7 +47,7 @@ const App: React.FC = () => {
             {/* Admin Hub */}
             <Route path="/admin" element={<PrivateRoute><AdminHub /></PrivateRoute>} />
             
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
         </Layout>
       </Router>
